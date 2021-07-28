@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headers :: header" />
+<style>
+    .fieldError{
+
+        color: red;
+    }
+</style>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <form role="form" action="/members/new" th:object="${memberForm}"
+          method="post">
+        <div class="form-group">
+            <label th:for="name">name</label>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="Enter name">
+                   <p>
+                       <span
+                           th:class="${#fields.hasErrors('name')}? 'fieldError' : 'form-control'"
+                           th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                       </span>
+
+        </div>
+        <div class="form-group">
+            <label th:for="city">city</label>
+            <input type="text" th:field="*{city}" class="form-control"placeholder="Enter city">
+        </div>
+        <div class="form-group">
+            <label th:for="street">street</label>
+            <input type="text" th:field="*{street}" class="form-control"
+                   placeholder="Enter street">
+        </div>
+        <div class="form-group">
+            <label th:for="zipcode">zipcode</label>
+            <input type="text" th:field="*{zipcode}" class="form-control"
+                   placeholder="Enter zipcode">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
