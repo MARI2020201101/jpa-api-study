@@ -22,10 +22,11 @@ public class InitDb {
     @PostConstruct
     public void init(){
         initService.makeSample1();
+        initService.makeSample2();
     }
 
     @RequiredArgsConstructor
-    @Service
+    @Component
     static class InitService{
 
         private final EntityManager em;
@@ -56,6 +57,46 @@ public class InitDb {
             delivery.setAddress(member.getAddress());
             Order order = Order.createOrder(member,delivery,orderItem1, orderItem2);
             em.persist(order);
+        }
+
+        @Transactional
+        public void makeSample2(){
+            Member member = createMember("memberB","경기도","22","10101");
+            em.persist(member);
+
+            Book book1 = createBook("Spring Book 1",25000,100);
+            em.persist(book1);
+
+            Book book2 = createBook("Spring Book 2",35000,30);
+            em.persist(book2);
+
+            OrderItem orderItem1 = OrderItem.createOrderItem(book1,25000,1);
+            OrderItem orderItem2 = OrderItem.createOrderItem(book2,70000,2);
+
+            Delivery delivery = createDelivery(member);
+            Order order = Order.createOrder(member,delivery,orderItem1, orderItem2);
+            em.persist(order);
+        }
+
+        private Delivery createDelivery(Member member) {
+            Delivery delivery = new Delivery();
+            delivery.setAddress(member.getAddress());
+            return delivery;
+        }
+
+        private Book createBook(String name, int price, int stockQuantity) {
+            Book book1 = new Book();
+            book1.setName(name);
+            book1.setPrice(price);
+            book1.setStockQuantity(stockQuantity);
+            return book1;
+        }
+
+        private Member createMember(String name, String city, String street, String zipcode) {
+            Member member = new Member();
+            member.setName(name);
+            member.setAddress(new Address(city,street,zipcode));
+            return member;
         }
     }
 
