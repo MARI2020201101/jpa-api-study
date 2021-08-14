@@ -9,6 +9,7 @@ import jpashop.jpabook.repository.OrderSearch;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,16 @@ public class OrderApiController {
         return orderRepository.findAllWithItems()
                 .stream()
                 .map(OrderDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("api/v3-1/orders")
+    public List<OrderDto> findOrderWithPageV3(
+            @RequestParam(value = "offset", defaultValue = "0")int offset
+            , @RequestParam(value = "limit", defaultValue = "100")int limit
+                                              ){
+        List<Order> orders = orderRepository.findAllWithPage(offset, limit);
+        return orders.stream().map(OrderDto::new)
                 .collect(Collectors.toList());
     }
 
